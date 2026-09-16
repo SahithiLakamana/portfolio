@@ -152,31 +152,31 @@ body {
   font-size: 18px;
   margin: 0 0 32px;
 }
-.hero-stats {
+.capabilities {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0,1fr));
-  gap: 16px;
-  max-width: 700px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  max-width: 800px;
   margin-bottom: 32px;
 }
-.stat {
+.capability {
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 16px 14px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
-.stat-num {
-  display: block;
-  font-size: 24px;
-  font-weight: 800;
+.cap-title {
+  font-size: 14px;
+  font-weight: 700;
   color: var(--accent);
-  font-family: var(--font-mono);
 }
-.stat-label {
-  display: block;
+.cap-desc {
   font-size: 12.5px;
   color: var(--text-muted);
-  margin-top: 4px;
+  line-height: 1.45;
 }
 .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
 
@@ -447,7 +447,7 @@ code {
   .header-links { gap: 12px; }
   .header-links a { font-size: 12px; }
   .hero { padding: 44px 0 32px; }
-  .hero-stats { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .capabilities { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
   .section { padding: 48px 0; }
   .project { padding: 20px; }
   .timeline-date { margin-left: 0; }
