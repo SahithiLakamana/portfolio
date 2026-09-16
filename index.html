@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sahithi Lakamana — Data Scientist &amp; ML Engineer</title>
-<meta name="description" content="Portfolio of Sahithi Lakamana — Data Scientist &amp; ML Engineer specializing in production LLM systems, applied statistics, and NLP. 5+ years experience, 4 first-author publications.">
+<title>Sahithi Lakamana — Machine Learning Engineer</title>
+<meta name="description" content="Portfolio of Sahithi Lakamana — Machine Learning Engineer building production LLM systems, applied statistics, and NLP, with deep healthcare domain expertise.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230f766e'/%3E%3Ctext x='50' y='68' font-size='52' font-family='Arial,sans-serif' font-weight='700' fill='white' text-anchor='middle'%3ESL%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,16 +40,16 @@
   <!-- HERO -->
   <section id="top" class="hero">
     <div class="wrap hero-inner">
-      <p class="eyebrow">Data Scientist &amp; ML Engineer</p>
+      <p class="eyebrow">Machine Learning Engineer</p>
       <h1>Sahithi Lakamana</h1>
       <p class="hero-summary">
-        I build production ML and LLM systems — from statistical surveillance pipelines processing tens of millions of records a month, to privacy-preserving clinical NLP deployments and gradient-boosted risk models. My focus is what happens after deployment: monitoring, drift detection, and evaluation rigor that hold up once real data stops looking like the training set.
+        I build production ML and LLM systems — from statistical surveillance pipelines processing tens of millions of records a month, to privacy-preserving NLP deployments and gradient-boosted risk models. My focus is what happens after deployment: monitoring, drift detection, and evaluation rigor that hold up once real data stops looking like the training set. Most of that work has been proven in healthcare, where the data is messy, the stakes are high, and validation can't be an afterthought.
       </p>
       <div class="hero-stats">
-        <div class="stat"><span class="stat-num">5+</span><span class="stat-label">years in applied ML/DS</span></div>
-        <div class="stat"><span class="stat-num">4</span><span class="stat-label">production LLM systems shipped</span></div>
-        <div class="stat"><span class="stat-num">4</span><span class="stat-label">first-author publications</span></div>
-        <div class="stat"><span class="stat-num">500+</span><span class="stat-label">citations</span></div>
+        <div class="stat"><span class="stat-num">5+</span><span class="stat-label">years in production ML/DS</span></div>
+        <div class="stat"><span class="stat-num">33M+</span><span class="stat-label">social posts processed / year</span></div>
+        <div class="stat"><span class="stat-num">150K+</span><span class="stat-label">clinical documents processed / year</span></div>
+        <div class="stat"><span class="stat-num">200+</span><span class="stat-label">researchers &amp; clinicians served</span></div>
       </div>
       <div class="hero-cta">
         <a class="btn btn-primary" href="#projects">View Projects</a>
@@ -80,6 +80,62 @@
       <div class="project-list">
 
         <!-- FLAGSHIP 1 -->
+        <article class="project project-flagship">
+          <div class="project-head">
+            <div>
+              <h3>Privacy-Preserving Clinical NLP Extraction with Locally-Hosted LLMs</h3>
+              <p class="project-tagline">Structured symptom extraction from 101,000 clinical notes using an LLM that never leaves institutional infrastructure — every output traceable back to its source text.</p>
+            </div>
+          </div>
+          <div class="tag-row">
+            <span class="tag">LLMs</span><span class="tag">Prompt Engineering</span><span class="tag">Structured Output</span><span class="tag">Evaluation Design</span>
+          </div>
+          <ul class="project-bullets">
+            <li>Designed a two-phase resolution architecture — a keyword match determines <em>processing order</em>, never what gets checked — so most of a patient's documentation never needs to reach the model, without missing symptoms phrased outside the keyword list.</li>
+            <li>Diagnosed a production failure by empirically fingerprinting the real inference backend (llama.cpp, not the assumed vLLM) from raw API responses, rather than trusting the documented API contract.</li>
+            <li>Built a fuzzy text-grounding algorithm so every extracted finding cites its exact supporting text — model-reported character offsets were rejected as unreliable by design, and low-confidence matches are dropped rather than silently guessed.</li>
+            <li>Caught a sample-size confound (real evaluated n as low as 15) that was making accuracy comparisons swing 30+ percentage points between supposedly identical model configurations, before it corrupted a model-selection decision.</li>
+          </ul>
+          <p class="internal-note">Internal healthcare system — code not publicly available.</p>
+
+          <details class="case-study">
+            <summary>View full case study</summary>
+            <div class="case-body">
+
+              <h4>Constraints that shaped the design</h4>
+              <ul class="plain-list">
+                <li><strong>Volume vs. cost:</strong> sending every line of ~101,000 notes to an LLM wasn't viable on a slow, resource-constrained model server.</li>
+                <li><strong>Privacy:</strong> all inference had to run on internally-hosted infrastructure — no data could leave institutional boundaries.</li>
+                <li><strong>Trust:</strong> downstream clinical review meant every finding needed a verifiable textual basis, not just a label.</li>
+              </ul>
+
+              <h4>Architecture</h4>
+              <p>For each patient, lines with an obvious keyword match are checked first (Phase A). Only if a target symptom is still unresolved does the pipeline fall back to that patient's remaining lines (Phase B) — if Phase A resolves everything, Phase B is skipped entirely. Requests are batched and schema-constrained via grammar-constrained decoding (symptom, status, supporting text, confidence), eliminating free-text parsing failures. Once a symptom is resolved for a patient, it's dropped from further queries for that patient.</p>
+
+              <h4>Key technical challenges</h4>
+              <ul class="plain-list">
+                <li><strong>Backend misdiagnosis:</strong> the pipeline was built assuming a vLLM-style backend using <code>guided_json</code>. Production testing showed malformed responses. Targeted, isolated API calls — reading model-file-format details in raw responses — revealed the real backend was llama.cpp with a different structured-output convention (<code>json_schema</code>). Fixing the parameter resolved it immediately.</li>
+                <li><strong>Truncation vs. token budget:</strong> longer response limits hurt accuracy and caused timeouts; shorter limits truncated mid-JSON. Solved by bounding only the one open-ended field (the supporting quote) via the grammar itself, verified empirically to be honored by the server.</li>
+                <li><strong>Reliable grounding:</strong> rather than trusting LLM-reported character offsets (unreliable and undetectably wrong when they fail), the model quotes text verbatim and a coverage-based fuzzy-matching algorithm locates the best-aligned span in the source line — below a confidence threshold, the match is rejected outright.</li>
+                <li><strong>Iterative prompt refinement:</strong> structured review of outputs against labeled cases surfaced specific, fixable error patterns — clinical-name substitution, evidence misattribution between related symptoms, inferring symptoms from a diagnosis mention alone, and confusing chronic/baseline conditions with acute findings.</li>
+              </ul>
+
+              <h4>Evaluation methodology</h4>
+              <p>Built a standalone evaluation framework independent of the extraction pipeline: expanded ground truth to a full (patient × symptom) grid so "never mentioned" cases are scored, excluded infrastructure failures (timeouts, malformed responses) from accuracy metrics entirely rather than counting them as wrong, and — after catching evaluated samples silently dropping to under 15 cases due to server-load variance — enforced a fixed evaluation grid before trusting any metric comparison.</p>
+
+              <h4>Model comparison</h4>
+              <p>Benchmarked a large general-purpose open-weight model against a smaller domain-tuned medical model: the general model ran ~3x faster and more consistently, while the medical model showed meaningfully better accuracy and text-grounding quality. This is informing a proposed hybrid strategy — fast model for initial screening, accurate model reserved for verification on the smaller candidate set.</p>
+
+              <h4>Reliability engineering</h4>
+              <p>Per-request retries with backoff, isolation of malformed responses so a single bad output never invalidates its batch, structured error categorization (timeout / malformed / connection failure) surfaced for auditability, and file-level resumability so a long-running job over the full dataset can be safely restarted.</p>
+
+              <h4>Tech stack</h4>
+              <p class="tech-line">Python · locally-hosted LLM (llama.cpp) · pandas · pydantic · grammar-constrained decoding</p>
+            </div>
+          </details>
+        </article>
+
+        <!-- FLAGSHIP 2 -->
         <article class="project project-flagship">
           <div class="project-head">
             <div>
@@ -142,7 +198,7 @@
           </details>
         </article>
 
-        <!-- FLAGSHIP 2 -->
+        <!-- FLAGSHIP 3 -->
         <article class="project project-flagship">
           <div class="project-head">
             <div>
@@ -205,62 +261,6 @@
           </details>
         </article>
 
-        <!-- FLAGSHIP 3 -->
-        <article class="project project-flagship">
-          <div class="project-head">
-            <div>
-              <h3>Privacy-Preserving Clinical NLP Extraction with Locally-Hosted LLMs</h3>
-              <p class="project-tagline">Structured symptom extraction from 101,000 clinical notes using an LLM that never leaves institutional infrastructure — every output traceable back to its source text.</p>
-            </div>
-          </div>
-          <div class="tag-row">
-            <span class="tag">LLMs</span><span class="tag">Prompt Engineering</span><span class="tag">Structured Output</span><span class="tag">Evaluation Design</span>
-          </div>
-          <ul class="project-bullets">
-            <li>Designed a two-phase resolution architecture — a keyword match determines <em>processing order</em>, never what gets checked — so most of a patient's documentation never needs to reach the model, without missing symptoms phrased outside the keyword list.</li>
-            <li>Diagnosed a production failure by empirically fingerprinting the real inference backend (llama.cpp, not the assumed vLLM) from raw API responses, rather than trusting the documented API contract.</li>
-            <li>Built a fuzzy text-grounding algorithm so every extracted finding cites its exact supporting text — model-reported character offsets were rejected as unreliable by design, and low-confidence matches are dropped rather than silently guessed.</li>
-            <li>Caught a sample-size confound (real evaluated n as low as 15) that was making accuracy comparisons swing 30+ percentage points between supposedly identical model configurations, before it corrupted a model-selection decision.</li>
-          </ul>
-          <p class="internal-note">Internal healthcare system — code not publicly available.</p>
-
-          <details class="case-study">
-            <summary>View full case study</summary>
-            <div class="case-body">
-
-              <h4>Constraints that shaped the design</h4>
-              <ul class="plain-list">
-                <li><strong>Volume vs. cost:</strong> sending every line of ~101,000 notes to an LLM wasn't viable on a slow, resource-constrained model server.</li>
-                <li><strong>Privacy:</strong> all inference had to run on internally-hosted infrastructure — no data could leave institutional boundaries.</li>
-                <li><strong>Trust:</strong> downstream clinical review meant every finding needed a verifiable textual basis, not just a label.</li>
-              </ul>
-
-              <h4>Architecture</h4>
-              <p>For each patient, lines with an obvious keyword match are checked first (Phase A). Only if a target symptom is still unresolved does the pipeline fall back to that patient's remaining lines (Phase B) — if Phase A resolves everything, Phase B is skipped entirely. Requests are batched and schema-constrained via grammar-constrained decoding (symptom, status, supporting text, confidence), eliminating free-text parsing failures. Once a symptom is resolved for a patient, it's dropped from further queries for that patient.</p>
-
-              <h4>Key technical challenges</h4>
-              <ul class="plain-list">
-                <li><strong>Backend misdiagnosis:</strong> the pipeline was built assuming a vLLM-style backend using <code>guided_json</code>. Production testing showed malformed responses. Targeted, isolated API calls — reading model-file-format details in raw responses — revealed the real backend was llama.cpp with a different structured-output convention (<code>json_schema</code>). Fixing the parameter resolved it immediately.</li>
-                <li><strong>Truncation vs. token budget:</strong> longer response limits hurt accuracy and caused timeouts; shorter limits truncated mid-JSON. Solved by bounding only the one open-ended field (the supporting quote) via the grammar itself, verified empirically to be honored by the server.</li>
-                <li><strong>Reliable grounding:</strong> rather than trusting LLM-reported character offsets (unreliable and undetectably wrong when they fail), the model quotes text verbatim and a coverage-based fuzzy-matching algorithm locates the best-aligned span in the source line — below a confidence threshold, the match is rejected outright.</li>
-                <li><strong>Iterative prompt refinement:</strong> structured review of outputs against labeled cases surfaced specific, fixable error patterns — clinical-name substitution, evidence misattribution between related symptoms, inferring symptoms from a diagnosis mention alone, and confusing chronic/baseline conditions with acute findings.</li>
-              </ul>
-
-              <h4>Evaluation methodology</h4>
-              <p>Built a standalone evaluation framework independent of the extraction pipeline: expanded ground truth to a full (patient × symptom) grid so "never mentioned" cases are scored, excluded infrastructure failures (timeouts, malformed responses) from accuracy metrics entirely rather than counting them as wrong, and — after catching evaluated samples silently dropping to under 15 cases due to server-load variance — enforced a fixed evaluation grid before trusting any metric comparison.</p>
-
-              <h4>Model comparison</h4>
-              <p>Benchmarked a large general-purpose open-weight model against a smaller domain-tuned medical model: the general model ran ~3x faster and more consistently, while the medical model showed meaningfully better accuracy and text-grounding quality. This is informing a proposed hybrid strategy — fast model for initial screening, accurate model reserved for verification on the smaller candidate set.</p>
-
-              <h4>Reliability engineering</h4>
-              <p>Per-request retries with backoff, isolation of malformed responses so a single bad output never invalidates its batch, structured error categorization (timeout / malformed / connection failure) surfaced for auditability, and file-level resumability so a long-running job over the full dataset can be safely restarted.</p>
-
-              <h4>Tech stack</h4>
-              <p class="tech-line">Python · locally-hosted LLM (llama.cpp) · pandas · pydantic · grammar-constrained decoding</p>
-            </div>
-          </details>
-        </article>
-
         <!-- LIGHT CARD 4 -->
         <article class="project project-light">
           <h3>Multi-Label Classification of Health-Related Social Media Text</h3>
@@ -297,15 +297,11 @@
   <section id="publications" class="section section-alt">
     <div class="wrap">
       <h2 class="section-title">Publications</h2>
-      <p class="section-sub">4 first-author papers, 10+ co-authored, 500+ citations. Full list on <a href="https://scholar.google.com/citations?user=YzwN1HUAAAAJ" target="_blank" rel="noopener">Google Scholar</a>.</p>
+      <p class="section-sub">Full record on <a href="https://scholar.google.com/citations?user=YzwN1HUAAAAJ" target="_blank" rel="noopener">Google Scholar</a>.</p>
 
       <div class="pub-group">
         <h3 class="pub-group-title">First-Author</h3>
         <ul class="pub-list">
-          <li>
-            <span class="pub-title">Testing Transferability of a Mortality Risk Model Using Real-World Electronic Health Records: External Validation and Model Enhancement</span>
-            <span class="pub-venue">Critical Care Explorations · presented at AMIA 2025</span>
-          </li>
           <li>
             <span class="pub-title">Novel Psychoactive Substance Trends on Reddit</span>
             <span class="pub-venue"><a href="https://www.sciencedirect.com/science/article/pii/S0376871626002309?via%3Dihub" target="_blank" rel="noopener">Drug and Alcohol Dependence</a></span>
@@ -323,7 +319,13 @@
 
       <div class="pub-group">
         <h3 class="pub-group-title">Co-Author</h3>
-        <p class="pub-coauthor">10+ publications in <em>JAMIA</em>, <em>JMIR</em>, <em>Drug and Alcohol Dependence</em>, <em>Clinical Toxicology</em>, and <em>Health Data Science</em>, including <a href="https://www.researchgate.net/publication/350672420_CoviDash-SM_A_Public_COVID19_Dashboard_for_Social_Media_Data-based_Research_and_Surveillance" target="_blank" rel="noopener">CoviDash-SM: A Public COVID-19 Dashboard for Social Media Data-Based Research and Surveillance</a>.</p>
+        <ul class="pub-list">
+          <li>
+            <span class="pub-title">Testing Transferability of a Mortality Risk Model Using Real-World Electronic Health Records: External Validation and Model Enhancement</span>
+            <span class="pub-venue">Critical Care Explorations · presented at AMIA 2025 — data science lead: pipeline design, modeling &amp; validation (featured above)</span>
+          </li>
+        </ul>
+        <p class="pub-coauthor">Plus 10+ additional publications in <em>JAMIA</em>, <em>JMIR</em>, <em>Drug and Alcohol Dependence</em>, <em>Clinical Toxicology</em>, and <em>Health Data Science</em>, including <a href="https://www.researchgate.net/publication/350672420_CoviDash-SM_A_Public_COVID19_Dashboard_for_Social_Media_Data-based_Research_and_Surveillance" target="_blank" rel="noopener">CoviDash-SM: A Public COVID-19 Dashboard for Social Media Data-Based Research and Surveillance</a>.</p>
       </div>
     </div>
   </section>
