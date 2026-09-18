@@ -1,74 +1,426 @@
-<!-- FLAGSHIP 4 - ADD THIS TO YOUR PROJECT LIST -->
-<article class="project project-flagship">
-  <div class="project-head">
-    <div>
-      <h3>Automated Demographic Extraction with LLM-as-a-Judge Validation</h3>
-      <p class="project-tagline">Hybrid human-LLM pipeline extracting self-reported age and gender from 2.3M social media posts, revealing critical risks in LLM-as-a-judge methodology through multi-model agreement analysis.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sahithi Lakamana — AI Engineer</title>
+<meta name="description" content="Portfolio of Sahithi Lakamana — AI engineer building production LLM systems, applied statistics, and NLP, with deep healthcare domain expertise.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230f766e'/%3E%3Ctext x='50' y='68' font-size='52' font-family='Arial,sans-serif' font-weight='700' fill='white' text-anchor='middle'%3ESL%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="skip-link"><a href="#main">Skip to content</a></div>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top">
+      <span class="brand-mark">SL</span>
+      <span class="brand-name">Sahithi Lakamana</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="#projects">Projects</a>
+      <a href="#publications">Publications</a>
+      <a href="#experience">Experience</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="header-links">
+      <a href="https://www.linkedin.com/in/sahithi-lakamana/" target="_blank" rel="noopener" aria-label="LinkedIn">LinkedIn</a>
+      <a href="https://scholar.google.com/citations?user=YzwN1HUAAAAJ" target="_blank" rel="noopener" aria-label="Google Scholar">Scholar</a>
+      <a href="https://github.com/SahithiLakamana" target="_blank" rel="noopener" aria-label="GitHub">GitHub</a>
     </div>
   </div>
-  <div class="tag-row">
-    <span class="tag">LLMs</span><span class="tag">Prompt Engineering</span><span class="tag">Model Evaluation</span><span class="tag">Validation Framework</span><span class="tag">Multi-Model Agreement</span>
-  </div>
-  <ul class="project-bullets">
-    <li>Designed two-stage annotation combining human labeling (κ = 0.95 age, κ = 1.00 gender) with parallel LLM extraction across three models (Llama 3 70B, GPT-OSS 120B, Gemini Gemma 3 27B) on 4,328 users and 2.3M posts.</li>
-    <li>Built LLM-as-a-judge validation with Gemini 3 27B, but identified critical bias: self-validation confirmation rates diverged 10.6x (4.0% vs 42.7% for Llama), revealing methodological risk of same-model extraction + validation.</li>
-    <li>Achieved F1 ≈ 0.93 (age) and F1 ≈ 0.90 (gender) on ensemble majority-vote; gender showed 98.9% inter-model consistency (1 disagreement across 856 users) vs. only 39% for age.</li>
-    <li>Revealed speed-accuracy trade-off: Gemini Gemma 3 at 1.3 sec/user (4,151 outputs) vs. Llama 3 70B at 37 sec/user with 42.7% validation confirmation; GPT-OSS 120B's 0.79 precision on gender most reliable.</li>
-  </ul>
+</header>
 
-  <details class="case-study">
-    <summary>View full case study</summary>
-    <div class="case-body">
+<main id="main">
 
-      <h4>Research Design</h4>
-      <p>Two-stage process: human annotators labeled explicit age/gender disclosures (125 age, 92 gender posts as ground truth); parallel LLM extraction using structured prompts restricting outputs to explicitly self-stated values. Inverse probability weighting addressed selection bias (1,225 age, 513 gender, 430 both vs. 4,328 total users).</p>
-
-      <h4>Prompt Engineering</h4>
-      <p>Structured prompt enforced strict extraction constraints: extract ONLY explicitly self-stated demographics, ignore other people's mentions, do not assume or guess, capture experience-based age references. Output format: "age | gender" with "null" for missing values. Validation instructions: return "yes", "no", or "cannot be determined" for extracted values.</p>
-
-      <h4>Model Performance</h4>
-      <table class="data-table">
-        <thead>
-          <tr><th>Metric</th><th>Llama 3 70B</th><th>GPT-OSS 120B</th><th>Gemini 27B</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Valid Outputs (Age)</td><td>3,331</td><td>141</td><td>4,151</td></tr>
-          <tr><td>Valid Outputs (Gender)</td><td>2,762</td><td>996</td><td>4,077</td></tr>
-          <tr><td>Time per User</td><td>37s</td><td>5.6s</td><td>1.3s</td></tr>
-          <tr><td>Posts Processed</td><td>64%</td><td>41%</td><td>10%</td></tr>
-          <tr><td>F1-Score (Weighted)</td><td>0.59–0.60</td><td>0.60–0.74</td><td>0.56–0.60</td></tr>
-          <tr><td>Precision (Gender)</td><td>0.47</td><td><strong>0.79</strong></td><td>0.47</td></tr>
-        </tbody>
-      </table>
-
-      <h4>LLM-as-a-Judge Validation — Critical Finding</h4>
-      <p>Gemini 3 27B validated whether extracted demographics were explicitly self-reported in original posts. Results revealed a major methodological risk:</p>
-      <table class="data-table">
-        <thead>
-          <tr><th>Model Being Validated</th><th>Confirmation Rate</th><th>Rejection Rate</th><th>Rate Difference vs. Llama</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Llama 3 70B</td><td>1,450 (42.7%)</td><td>1,563 (46.0%)</td><td>—</td></tr>
-          <tr><td>GPT-OSS 120B</td><td>461 (30.1%)</td><td>910 (59.4%)</td><td>1.4x</td></tr>
-          <tr><td>Gemini 3 27B (self-validation)</td><td>169 (4.0%)</td><td>3,686 (<strong>86.9%</strong>)</td><td><strong>10.6x</strong></td></tr>
-        </tbody>
-      </table>
-      <p><strong>The problem:</strong> Using the same model for both extraction and validation creates circular bias. Gemini rejected its own outputs 86.9% of the time, while independent Llama validation on those same extractions showed 42.7% confirmation. On gold-standard human annotations (103 posts), all models achieved identical F1 = 0.93, proving the validation discrepancy reflects methodology, not quality.</p>
-
-      <h4>Agreement Analysis</h4>
-      <p><strong>Gender:</strong> 308/856 identical outputs (36%); 98.9% consistency across all three models (only 1 complete disagreement among 856 users). <br><strong>Age:</strong> 48/123 full agreement (39%); 43/123 complete disagreement (35%).</p>
-      <p><strong>Error distribution:</strong> GPT-OSS 120B most precise (5 age, 82 gender); Llama 3 70B highest volume (3,331 age, 2,762 gender); Gemini 3 27B tied with GPT-OSS on age accuracy (5 errors) but higher gender errors (231).</p>
-
-      <h4>Data Processing & Statistical Control</h4>
-      <ul class="plain-list">
-        <li><strong>Temporal filtering:</strong> For users with multiple age disclosures, selected closest to T0, adjusted forward using elapsed time; excluded 31 users (2.5%) with inconsistent ages.</li>
-        <li><strong>Age categorization:</strong> Four bands (&lt;20, 20–29, 30–39, 40+).</li>
-        <li><strong>Selection bias:</strong> Applied inverse probability weighting to account for non-random sampling of demographic subsets.</li>
-        <li><strong>Validation methodology:</strong> Independent validation on 103 human-labeled posts to avoid circular bias.</li>
-      </ul>
-
-      <h4>Tech stack</h4>
-      <p class="tech-line">Python · Llama 3 70B · GPT-OSS 120B · Gemini Gemma 3 27B · Structured prompting · Cohen's κ · Inverse probability weighting</p>
+  <!-- HERO -->
+  <section id="top" class="hero">
+    <div class="wrap hero-inner">
+      <p class="eyebrow">AI Engineer</p>
+      <h1>Sahithi Lakamana</h1>
+      <p class="hero-summary">
+        I build production ML and LLM systems - from statistical surveillance pipelines processing tens of millions of records a month, to privacy-preserving NLP deployments and gradient-boosted risk models. My focus is what happens after deployment: monitoring, drift detection, and evaluation rigor that hold up once real data stops looking like the training set. Most of that work has been proven in healthcare, where the data is messy, the stakes are high, and validation can't be an afterthought.
+      </p>
+      <div class="capabilities">
+        <div class="capability"><span class="cap-title">Built ML Models &amp; Production LLMs</span><span class="cap-desc">From prototype to deployment, including privacy-preserving, HIPAA-compliant LLM inference</span></div>
+        <div class="capability"><span class="cap-title">Handles Massive-Scale Data</span><span class="cap-desc">33M+ posts/month, integrated across multiple data sources</span></div>
+        <div class="capability"><span class="cap-title">Real-Time Dashboard Analytics</span><span class="cap-desc">Live pipelines powering interactive, sub-second dashboards</span></div>
+        <div class="capability"><span class="cap-title">RAG Built From Scratch</span><span class="cap-desc">Retrieval-augmented generation implemented ground-up, not off-the-shelf</span></div>
+      </div>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#projects">View Projects</a>
+        <a class="btn btn-ghost" href="#contact">Get in touch</a>
+      </div>
     </div>
-  </details>
-</article>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="skills-strip">
+    <div class="wrap">
+      <div class="skills-row">
+        <span>Python</span><span>SQL</span><span>PyTorch</span><span>TensorFlow</span>
+        <span>Transformers / LLMs</span><span>vLLM</span><span>Scikit-learn</span>
+        <span>XGBoost · CatBoost · LightGBM</span><span>NLP</span><span>Statistical Testing</span>
+        <span>A/B Testing</span><span>Time-Series Analysis</span><span>Tableau</span>
+        <span>MongoDB</span><span>BigQuery / GCP</span><span>ETL Pipelines</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="section">
+    <div class="wrap">
+      <h2 class="section-title">Projects</h2>
+      <p class="section-sub">A selection of production systems and published research. The three below include full case studies — click to expand.</p>
+
+      <div class="project-list">
+
+        <!-- FLAGSHIP 1 -->
+        <article class="project project-flagship">
+          <div class="project-head">
+            <div>
+              <h3>Privacy-Preserving Clinical NLP Extraction with Locally-Hosted LLMs</h3>
+              <p class="project-tagline">Structured symptom extraction from 101,000 clinical notes using an LLM that never leaves institutional infrastructure — every output traceable back to its source text.</p>
+            </div>
+          </div>
+          <div class="tag-row">
+            <span class="tag">LLMs</span><span class="tag">Prompt Engineering</span><span class="tag">Structured Output</span><span class="tag">Evaluation Design</span>
+          </div>
+          <ul class="project-bullets">
+            <li>Designed a two-phase resolution architecture — a keyword match determines <em>processing order</em>, never what gets checked — so most of a patient's documentation never needs to reach the model, without missing symptoms phrased outside the keyword list.</li>
+            <li>Diagnosed a production failure by empirically fingerprinting the real inference backend (llama.cpp, not the assumed vLLM) from raw API responses, rather than trusting the documented API contract.</li>
+            <li>Built a fuzzy text-grounding algorithm so every extracted finding cites its exact supporting text — model-reported character offsets were rejected as unreliable by design, and low-confidence matches are dropped rather than silently guessed.</li>
+            <li>Caught a sample-size confound (real evaluated n as low as 15) that was making accuracy comparisons swing 30+ percentage points between supposedly identical model configurations, before it corrupted a model-selection decision.</li>
+          </ul>
+          <p class="internal-note">Internal healthcare system — code not publicly available.</p>
+
+          <details class="case-study">
+            <summary>View full case study</summary>
+            <div class="case-body">
+
+              <h4>Constraints that shaped the design</h4>
+              <ul class="plain-list">
+                <li><strong>Volume vs. cost:</strong> sending every line of ~101,000 notes to an LLM wasn't viable on a slow, resource-constrained model server.</li>
+                <li><strong>Privacy:</strong> all inference had to run on internally-hosted infrastructure — no data could leave institutional boundaries.</li>
+                <li><strong>Trust:</strong> downstream clinical review meant every finding needed a verifiable textual basis, not just a label.</li>
+              </ul>
+
+              <h4>Architecture</h4>
+              <p>For each patient, lines with an obvious keyword match are checked first (Phase A). Only if a target symptom is still unresolved does the pipeline fall back to that patient's remaining lines (Phase B) — if Phase A resolves everything, Phase B is skipped entirely. Requests are batched and schema-constrained via grammar-constrained decoding (symptom, status, supporting text, confidence), eliminating free-text parsing failures. Once a symptom is resolved for a patient, it's dropped from further queries for that patient.</p>
+
+              <h4>Key technical challenges</h4>
+              <ul class="plain-list">
+                <li><strong>Backend misdiagnosis:</strong> the pipeline was built assuming a vLLM-style backend using <code>guided_json</code>. Production testing showed malformed responses. Targeted, isolated API calls — reading model-file-format details in raw responses — revealed the real backend was llama.cpp with a different structured-output convention (<code>json_schema</code>). Fixing the parameter resolved it immediately.</li>
+                <li><strong>Truncation vs. token budget:</strong> longer response limits hurt accuracy and caused timeouts; shorter limits truncated mid-JSON. Solved by bounding only the one open-ended field (the supporting quote) via the grammar itself, verified empirically to be honored by the server.</li>
+                <li><strong>Reliable grounding:</strong> rather than trusting LLM-reported character offsets (unreliable and undetectably wrong when they fail), the model quotes text verbatim and a coverage-based fuzzy-matching algorithm locates the best-aligned span in the source line — below a confidence threshold, the match is rejected outright.</li>
+                <li><strong>Iterative prompt refinement:</strong> structured review of outputs against labeled cases surfaced specific, fixable error patterns — clinical-name substitution, evidence misattribution between related symptoms, inferring symptoms from a diagnosis mention alone, and confusing chronic/baseline conditions with acute findings.</li>
+              </ul>
+
+              <h4>Evaluation methodology</h4>
+              <p>Built a standalone evaluation framework independent of the extraction pipeline: expanded ground truth to a full (patient × symptom) grid so "never mentioned" cases are scored, excluded infrastructure failures (timeouts, malformed responses) from accuracy metrics entirely rather than counting them as wrong, and — after catching evaluated samples silently dropping to under 15 cases due to server-load variance — enforced a fixed evaluation grid before trusting any metric comparison.</p>
+
+              <h4>Model comparison</h4>
+              <p>Benchmarked a large general-purpose open-weight model against a smaller domain-tuned medical model: the general model ran ~3x faster and more consistently, while the medical model showed meaningfully better accuracy and text-grounding quality. This is informing a proposed hybrid strategy — fast model for initial screening, accurate model reserved for verification on the smaller candidate set.</p>
+
+              <h4>Reliability engineering</h4>
+              <p>Per-request retries with backoff, isolation of malformed responses so a single bad output never invalidates its batch, structured error categorization (timeout / malformed / connection failure) surfaced for auditability, and file-level resumability so a long-running job over the full dataset can be safely restarted.</p>
+
+              <h4>Tech stack</h4>
+              <p class="tech-line">Python · locally-hosted LLM (llama.cpp) · pandas · pydantic · grammar-constrained decoding</p>
+            </div>
+          </details>
+        </article>
+
+        <!-- FLAGSHIP 2 -->
+        <article class="project project-flagship">
+          <div class="project-head">
+            <div>
+              <h3>Reddit-Based Early-Warning System for Emerging Drug Trends</h3>
+              <p class="project-tagline">An NLP + statistics pipeline that detects new psychoactive substances in social media discussion 1–2 years before official surveillance data catches up.</p>
+            </div>
+          </div>
+          <div class="tag-row">
+            <span class="tag">NLP</span><span class="tag">LLMs</span><span class="tag">Time-Series Statistics</span><span class="tag">Production ML</span><span class="tag">Data Engineering</span>
+          </div>
+          <ul class="project-bullets">
+            <li>Built a 4-stage detection pipeline (LLM candidate generation → post-processing → statistical validation → time-series novelty detection) that narrowed 33M+ monthly Reddit posts down to 9 confirmed novel substances.</li>
+            <li>Validated findings against DEA forensic lab data (NFLIS): Reddit discussion volume led official detection by 1–2 years, with Spearman correlations up to ρ = 0.93.</li>
+            <li>First-author publication in <em>Drug and Alcohol Dependence</em>, analyzing 328,223 posts across 60,601 subreddits (Jan 2015–Jun 2025).</li>
+            <li>The underlying production system — MongoDB + Tableau + a Claude-powered natural-language query tool — serves 200+ academic and public-health researchers at 98%+ uptime, processing 30M+ Reddit and 200K+ Twitter posts monthly.</li>
+          </ul>
+          <div class="link-row">
+            <a href="https://github.com/Sarker-Lab/NPS-Surveillance" target="_blank" rel="noopener">GitHub — NPS Surveillance</a>
+            <a href="https://github.com/SahithiLakamana/reddit-pharmacovigilance-pipeline" target="_blank" rel="noopener">GitHub — Pharmacovigilance Pipeline</a>
+            <a href="https://www.sciencedirect.com/science/article/pii/S0376871626002309?via%3Dihub" target="_blank" rel="noopener">Publication</a>
+            <a href="https://sarkerlab.org/dashboard/" target="_blank" rel="noopener">Live Dashboard</a>
+          </div>
+
+          <details class="case-study">
+            <summary>View full case study</summary>
+            <div class="case-body">
+
+              <h4>Problem</h4>
+              <p>New psychoactive substances (NPS) typically take 1–2 years to reach official detection through clinical reports, forensic labs, or law enforcement seizures — a delay that limits harm-reduction and policy response. Reddit hosts early, informal discussion of emerging drugs months or years ahead of official channels, but manually monitoring thousands of posts across tens of thousands of subreddits isn't feasible.</p>
+
+              <h4>Detection pipeline</h4>
+              <table class="data-table">
+                <thead><tr><th>Stage</th><th>What it does</th><th>Output</th></tr></thead>
+                <tbody>
+                  <tr><td>1. Model inference</td><td>MedGemma LLM (INT8-quantized, 75% memory reduction, 2.5–3x speedup) scans 33M posts/month</td><td>7,035 keyword candidates</td></tr>
+                  <tr><td>2. Post-processing</td><td>Filter known medications, dedupe variants/misspellings, split into medical vs. generic-context corpora</td><td>251 candidates</td></tr>
+                  <tr><td>3. Statistical validation</td><td>Incidence Rate Ratio (med-corpus vs. generic-corpus, 95% CI, per-subreddit normalized)</td><td>77 candidates</td></tr>
+                  <tr><td>4. Novelty detection</td><td>Z-score analysis on 7-day rolling post volume vs. 4-year historical baseline</td><td>9 confirmed new NPS</td></tr>
+                </tbody>
+              </table>
+
+              <h4>Statistical validation against official data</h4>
+              <p>Reddit post volume for each substance was correlated against DEA NFLIS forensic lab reports (2015–2024) using Spearman rank correlation with Bonferroni-adjusted significance (α = 0.05/25 for 5 substances × 5 time lags), plus Mann-Kendall trend tests for monotonic increase.</p>
+              <table class="data-table">
+                <thead><tr><th>Substance</th><th>Correlation with NFLIS</th><th>Lead time</th></tr></thead>
+                <tbody>
+                  <tr><td>Medetomidine</td><td>ρ = 0.93 (lag −2y)</td><td>2 years</td></tr>
+                  <tr><td>Tianeptine</td><td>ρ = 0.81 (lag −2y)</td><td>2 years</td></tr>
+                  <tr><td>Bromazolam</td><td>ρ = 0.81 (lag −1y)</td><td>1 year</td></tr>
+                  <tr><td>Xylazine</td><td>ρ = 0.60 / τ = 0.96 trend</td><td>2 years</td></tr>
+                </tbody>
+              </table>
+
+              <h4>Production infrastructure</h4>
+              <p>A 24/7 Python pipeline ingests Reddit (primary, ~1M posts/day) and Twitter (secondary) via authenticated, rate-limit-aware API clients, runs classification + topic modeling (LDA) + sentiment analysis, and aggregates into MongoDB — with raw post text discarded after feature extraction for a 96%+ storage reduction while retaining full analytical value. Aggregated data feeds Tableau Server dashboards (sub-second query response, 50+ concurrent users) and a Claude-API-backed tool that lets researchers query the dataset in natural language.</p>
+
+              <h4>Tech stack</h4>
+              <p class="tech-line">Python · MedGemma (quantized LLM) · PRAW / Twitter API · scikit-learn · Gensim (LDA) · scipy / statsmodels · MongoDB · Tableau Desktop &amp; Server · Claude API</p>
+            </div>
+          </details>
+        </article>
+
+        <!-- FLAGSHIP 3 -->
+        <article class="project project-flagship">
+          <div class="project-head">
+            <div>
+              <h3>Building &amp; Externally Validating an ICU Mortality Risk Model</h3>
+              <p class="project-tagline">Trained gradient-boosted models on local EHR data, benchmarked them against a published mortality-risk model, then validated the result in live clinical deployment.</p>
+            </div>
+          </div>
+          <div class="tag-row">
+            <span class="tag">Clinical ML</span><span class="tag">Gradient Boosting</span><span class="tag">Model Validation</span><span class="tag">Calibration</span>
+          </div>
+          <ul class="project-bullets">
+            <li>Reconstructed and externally validated the published SafeNET model on 7,773 patients (8,253 encounters) at an independent health system — AUC 0.87 — then trained CatBoost/LightGBM/XGBoost models on local data that outperformed it (AUC 0.92, F1 0.77).</li>
+            <li>Ran a full retrospective validation followed by a prospective clinical deployment; confirmed no meaningful performance drift over 2–3 months of live use.</li>
+            <li>Addressed 91–99% missingness in key predictors through a clinician-education intervention that cut missingness by 50–80% without any system changes.</li>
+            <li>Published in <em>Critical Care Explorations</em>; presented at AMIA 2025.</li>
+          </ul>
+          <div class="link-row">
+            <a href="https://github.com/bozlab/emory-safenet-validation" target="_blank" rel="noopener">GitHub — Repository</a>
+          </div>
+
+          <details class="case-study">
+            <summary>View full case study</summary>
+            <div class="case-body">
+
+              <h4>Context</h4>
+              <p>Interhospital transfer (IHT) affects 1.6M+ US adults annually. SafeNET, a mortality-risk model developed at a different institution, had never been validated outside its home system — and pre-transfer clinical data is notoriously fragmented across health systems, raising the question of whether an externally developed model could perform reliably with real-world data gaps.</p>
+
+              <h4>Approach</h4>
+              <ul class="plain-list">
+                <li><strong>Data harmonization:</strong> mapped 14 SafeNET predictors (vitals, labs, comorbidities, functional status) across incompatible local EHR schemas; manually verified outcomes due to data fragmentation.</li>
+                <li><strong>Class imbalance:</strong> tested random under-sampling vs. algorithm-level class weighting for the ~1:27 mortality-to-survival ratio — class weighting won.</li>
+                <li><strong>Missing data:</strong> combined native tree-model null handling, dynamic per-encounter feature availability, and a reduced 10-core-variable feature set selected for minimal missingness.</li>
+                <li><strong>Validation:</strong> stratified 70/30 train-test split, 5-fold cross-validation optimizing F1, held-out test evaluation, then live prospective monitoring post-deployment.</li>
+              </ul>
+
+              <h4>Results — in-hospital mortality prediction</h4>
+              <table class="data-table">
+                <thead><tr><th>Phase</th><th>Model</th><th>AUC</th><th>F1</th><th>Brier</th></tr></thead>
+                <tbody>
+                  <tr><td>Retrospective</td><td>SafeNET (external)</td><td>0.87</td><td>0.73</td><td>0.05</td></tr>
+                  <tr><td>Retrospective</td><td>Best local (LightGBM)</td><td>0.92</td><td>0.77</td><td>0.04</td></tr>
+                  <tr><td>Prospective</td><td>Deployed model (live validation)</td><td>0.91</td><td>0.76</td><td>0.04</td></tr>
+                </tbody>
+              </table>
+
+              <h4>Data quality improvement (prospective phase)</h4>
+              <table class="data-table">
+                <thead><tr><th>Variable group</th><th>Retrospective missing</th><th>Prospective missing</th></tr></thead>
+                <tbody>
+                  <tr><td>Vitals &amp; labs</td><td>42–43%</td><td>8–10%</td></tr>
+                  <tr><td>Functional status</td><td>91.3%</td><td>45–50%</td></tr>
+                  <tr><td>Comorbidity indicators</td><td>96–99%</td><td>20–30%</td></tr>
+                </tbody>
+              </table>
+              <p>Achieved through clinician education on which fields the model actually needed — no EHR changes, no new infrastructure.</p>
+
+              <h4>Tech stack</h4>
+              <p class="tech-line">Python · CatBoost · LightGBM · XGBoost · scikit-learn · 5-fold cross-validation · calibration analysis (Brier score)</p>
+            </div>
+          </details>
+        </article>
+
+        <!-- LIGHT CARD 4 -->
+        <article class="project project-light">
+          <h3>Multi-Label Classification of Health-Related Social Media Text</h3>
+          <p class="project-tagline">Transformer-based classifier plus production drift monitoring for detecting stigma, bullying, and treatment experiences in dermatology-related discussion.</p>
+          <div class="tag-row">
+            <span class="tag">Transformers</span><span class="tag">Multi-Label Classification</span><span class="tag">Class Imbalance</span><span class="tag">Model Monitoring</span>
+          </div>
+          <ul class="project-bullets">
+            <li>Fine-tuned RoBERTa-Large with a custom multi-label classification head; 87% macro F1 despite ~10x class imbalance (29–317 labeled examples per class).</li>
+            <li>Built a monthly drift-detection loop (top/bottom confidence-based sampling) that cut required expert labeling from ~5,000 posts/month to 1,000 — reducing cost from an estimated $250K/month to ~$1K/month.</li>
+            <li>Prevented catastrophic forgetting during monthly retraining by combining new labels with the full original training set rather than replacing it.</li>
+          </ul>
+        </article>
+
+        <!-- LIGHT CARD 5 -->
+        <article class="project project-light">
+          <h3>A/B Testing &amp; Experimentation Platform</h3>
+          <p class="project-tagline">Statistically rigorous experimentation program for a credit-card comparison platform, from hypothesis to production rollout.</p>
+          <div class="tag-row">
+            <span class="tag">A/B Testing</span><span class="tag">Statistical Inference</span><span class="tag">Python</span><span class="tag">SQL</span>
+          </div>
+          <ul class="project-bullets">
+            <li>Designed and ran A/B tests (chi-square and Z-tests for proportions, 95% confidence intervals, pre-registered power analysis) on UI/UX and feature changes at thousands of users per variant per day.</li>
+            <li>Identified and shipped multiple winning variants with 2–5% lifts in click-through and conversion rate to 100% of traffic.</li>
+            <li>Built reusable Python/SQL analysis tooling and fixed stopping rules to guard against p-hacking and continuous-peeking bias.</li>
+          </ul>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PUBLICATIONS -->
+  <section id="publications" class="section section-alt">
+    <div class="wrap">
+      <h2 class="section-title">Publications</h2>
+      <p class="section-sub">Full record on <a href="https://scholar.google.com/citations?user=YzwN1HUAAAAJ" target="_blank" rel="noopener">Google Scholar</a>.</p>
+
+      <div class="pub-group">
+        <h3 class="pub-group-title">First-Author</h3>
+        <ul class="pub-list">
+          <li>
+            <span class="pub-title">Novel Psychoactive Substance Trends on Reddit</span>
+            <span class="pub-venue"><a href="https://www.sciencedirect.com/science/article/pii/S0376871626002309?via%3Dihub" target="_blank" rel="noopener">Drug and Alcohol Dependence</a></span>
+          </li>
+          <li>
+            <span class="pub-title">COVID-19 Twitter Analysis</span>
+            <span class="pub-venue">AMIA 2022 Annual Symposium</span>
+          </li>
+          <li>
+            <span class="pub-title">Chronic Pain Cohort Study</span>
+            <span class="pub-venue">medRxiv, 2022</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="pub-group">
+        <h3 class="pub-group-title">Co-Author</h3>
+        <ul class="pub-list">
+          <li>
+            <span class="pub-title">Testing Transferability of a Mortality Risk Model Using Real-World Electronic Health Records: External Validation and Model Enhancement</span>
+            <span class="pub-venue">Critical Care Explorations · presented at AMIA 2025 — data science lead: pipeline design, modeling &amp; validation (featured above)</span>
+          </li>
+        </ul>
+        <p class="pub-coauthor">Plus 10+ additional publications in <em>JAMIA</em>, <em>JMIR</em>, <em>Drug and Alcohol Dependence</em>, <em>Clinical Toxicology</em>, and <em>Health Data Science</em>, including <a href="https://www.researchgate.net/publication/350672420_CoviDash-SM_A_Public_COVID19_Dashboard_for_Social_Media_Data-based_Research_and_Surveillance" target="_blank" rel="noopener">CoviDash-SM: A Public COVID-19 Dashboard for Social Media Data-Based Research and Surveillance</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" class="section">
+    <div class="wrap">
+      <h2 class="section-title">Experience</h2>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-meta">
+            <span class="timeline-role">AI Scientist / Engineer II</span>
+            <span class="timeline-org">Emory University — Dept. of Biomedical Informatics</span>
+            <span class="timeline-date">Mar 2020 – Present</span>
+          </div>
+          <ul class="plain-list">
+            <li>Lead developer of 4 production LLM systems supporting 15+ research teams, processing 150K+ clinical documents and 33M+ social media posts annually.</li>
+            <li>Built a 2-stage hybrid LLM pipeline (MedGemma, GPT-OSS) achieving 92% F1 at 9x throughput, deployed to clinicians on vLLM for HIPAA-compliant inference.</li>
+            <li>Own ETL infrastructure to BigQuery on GCP; manage 10TB+ MongoDB clusters (40% latency reduction); built 5+ Tableau dashboards supporting 20+ publications.</li>
+            <li>Implemented core retrieval/similarity algorithms from scratch — HNSW indexing, BM25, cosine similarity, Pearson/Spearman correlation.</li>
+          </ul>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-meta">
+            <span class="timeline-role">Data Analyst</span>
+            <span class="timeline-org">QuinStreet</span>
+            <span class="timeline-date">Oct 2021 – May 2023</span>
+          </div>
+          <ul class="plain-list">
+            <li>Built a gradient-boosting model that improved conversion rates 6%; automated Python/Tableau/Redshift workflow drove a 16.8% bid increase for 2 Fortune 500 clients.</li>
+            <li>Designed Tableau alert systems that prevented 2 revenue incidents; led A/B-tested budget allocation contributing a 4.1% monthly revenue increase.</li>
+          </ul>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-meta">
+            <span class="timeline-role">Data Scientist</span>
+            <span class="timeline-org">Nuance Communications</span>
+            <span class="timeline-date">Sep 2019 – Dec 2019</span>
+          </div>
+          <ul class="plain-list">
+            <li>Constructed clinical word embeddings using UMLS; implemented ICD-9 classification on MIMIC-III with neural networks.</li>
+          </ul>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-meta">
+            <span class="timeline-role">Data Science Intern</span>
+            <span class="timeline-org">TRIARQ Health Care</span>
+            <span class="timeline-date">May 2019 – Aug 2019</span>
+          </div>
+          <ul class="plain-list">
+            <li>Built predictive models for case-mix/pricing (+30% accuracy); automated ETL via BigQuery and Python; deployed Bokeh dashboards (40% latency reduction).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="education">
+        <h3 class="pub-group-title">Education</h3>
+        <ul class="plain-list">
+          <li><strong>M.S., Data Analytics &amp; Engineering</strong> — George Mason University, 2019</li>
+          <li><strong>B.S., Mechanical Engineering</strong> — Andhra University, India, 2018</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section section-alt contact-section">
+    <div class="wrap">
+      <h2 class="section-title">Get in touch</h2>
+      <p class="section-sub">Best reached through LinkedIn. Full publication record on Google Scholar.</p>
+      <div class="contact-links">
+        <a class="btn btn-primary" href="https://www.linkedin.com/in/sahithi-lakamana/" target="_blank" rel="noopener">Connect on LinkedIn</a>
+        <a class="btn btn-ghost" href="https://scholar.google.com/citations?user=YzwN1HUAAAAJ" target="_blank" rel="noopener">Google Scholar</a>
+        <a class="btn btn-ghost" href="https://github.com/SahithiLakamana" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <span>Sahithi Lakamana</span>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/sahithi-lakamana/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://scholar.google.com/citations?user=YzwN1HUAAAAJ" target="_blank" rel="noopener">Google Scholar</a>
+      <a href="https://github.com/SahithiLakamana" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
