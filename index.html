@@ -91,10 +91,10 @@
             <span class="tag">LLMs</span><span class="tag">Prompt Engineering</span><span class="tag">Model Evaluation</span><span class="tag">Validation Framework</span><span class="tag">Multi-Model Agreement</span>
           </div>
           <ul class="project-bullets">
-            <li>Designed two-stage annotation combining human labeling (κ = 0.95 age, κ = 1.00 gender) with parallel LLM extraction across three models (Llama 3 70B, GPT-OSS 120B, Gemini Gemma 3 27B) on 4,328 users and 2.3M posts.</li>
-            <li>Built LLM-as-a-judge validation with Gemini 3 27B, but identified critical bias: self-validation confirmation rates diverged 10.6x (4.0% vs 42.7% for Llama), revealing methodological risk of same-model extraction + validation.</li>
+            <li>Designed two-stage annotation combining human labeling (κ = 0.95 age, κ = 1.00 gender) with parallel LLM extraction across three models (Llama 3 70B, GPT-OSS 120B, Gemma 3 27B) on 4,328 users and 2.3M posts.</li>
+            <li>Built LLM-as-a-judge validation with Gemma 3 27B, but identified critical bias: self-validation confirmation rates diverged 10.6x (4.0% vs 42.7% for Llama), revealing methodological risk of same-model extraction + validation.</li>
             <li>Achieved F1 ≈ 0.93 (age) and F1 ≈ 0.90 (gender) on ensemble majority-vote; gender showed 98.9% inter-model consistency (1 disagreement across 856 users) vs. only 39% for age.</li>
-            <li>Revealed speed-accuracy trade-off: Gemini Gemma 3 at 1.3 sec/user (4,151 outputs) vs. Llama 3 70B at 37 sec/user with 42.7% validation confirmation; GPT-OSS 120B's 0.79 precision on gender most reliable.</li>
+            <li>Revealed speed-accuracy trade-off: Gemma 3 at 1.3 sec/user (4,151 outputs) vs. Llama 3 70B at 37 sec/user with 42.7% validation confirmation; GPT-OSS 120B's 0.79 precision on gender most reliable.</li>
           </ul>
         
           <details class="case-study">
@@ -110,7 +110,7 @@
               <h4>Model Performance</h4>
               <table class="data-table">
                 <thead>
-                  <tr><th>Metric</th><th>Llama 3 70B</th><th>GPT-OSS 120B</th><th>Gemini 27B</th></tr>
+                  <tr><th>Metric</th><th>Llama 3 70B</th><th>GPT-OSS 120B</th><th>Gemma 27B</th></tr>
                 </thead>
                 <tbody>
                   <tr><td>Valid Outputs (Age)</td><td>3,331</td><td>141</td><td>4,151</td></tr>
@@ -123,7 +123,7 @@
               </table>
         
               <h4>LLM-as-a-Judge Validation — Critical Finding</h4>
-              <p>Gemini 3 27B validated whether extracted demographics were explicitly self-reported in original posts. Results revealed a major methodological risk:</p>
+              <p>Gemma 3 27B validated whether extracted demographics were explicitly self-reported in original posts. Results revealed a major methodological risk:</p>
               <table class="data-table">
                 <thead>
                   <tr><th>Model Being Validated</th><th>Confirmation Rate</th><th>Rejection Rate</th><th>Rate Difference vs. Llama</th></tr>
@@ -131,14 +131,14 @@
                 <tbody>
                   <tr><td>Llama 3 70B</td><td>1,450 (42.7%)</td><td>1,563 (46.0%)</td><td>—</td></tr>
                   <tr><td>GPT-OSS 120B</td><td>461 (30.1%)</td><td>910 (59.4%)</td><td>1.4x</td></tr>
-                  <tr><td>Gemini 3 27B (self-validation)</td><td>169 (4.0%)</td><td>3,686 (<strong>86.9%</strong>)</td><td><strong>10.6x</strong></td></tr>
+                  <tr><td>Gemma 3 27B (self-validation)</td><td>169 (4.0%)</td><td>3,686 (<strong>86.9%</strong>)</td><td><strong>10.6x</strong></td></tr>
                 </tbody>
               </table>
-              <p><strong>The problem:</strong> Using the same model for both extraction and validation creates circular bias. Gemini rejected its own outputs 86.9% of the time, while independent Llama validation on those same extractions showed 42.7% confirmation. On gold-standard human annotations (103 posts), all models achieved identical F1 = 0.93, proving the validation discrepancy reflects methodology, not quality.</p>
+              <p><strong>The problem:</strong> Using the same model for both extraction and validation creates circular bias. Gemma rejected its own outputs 86.9% of the time, while independent Llama validation on those same extractions showed 42.7% confirmation. On gold-standard human annotations (103 posts), all models achieved identical F1 = 0.93, proving the validation discrepancy reflects methodology, not quality.</p>
         
               <h4>Agreement Analysis</h4>
               <p><strong>Gender:</strong> 308/856 identical outputs (36%); 98.9% consistency across all three models (only 1 complete disagreement among 856 users). <br><strong>Age:</strong> 48/123 full agreement (39%); 43/123 complete disagreement (35%).</p>
-              <p><strong>Error distribution:</strong> GPT-OSS 120B most precise (5 age, 82 gender); Llama 3 70B highest volume (3,331 age, 2,762 gender); Gemini 3 27B tied with GPT-OSS on age accuracy (5 errors) but higher gender errors (231).</p>
+              <p><strong>Error distribution:</strong> GPT-OSS 120B most precise (5 age, 82 gender); Llama 3 70B highest volume (3,331 age, 2,762 gender); Gemma 3 27B tied with GPT-OSS on age accuracy (5 errors) but higher gender errors (231).</p>
         
               <h4>Data Processing & Statistical Control</h4>
               <ul class="plain-list">
@@ -149,7 +149,7 @@
               </ul>
         
               <h4>Tech stack</h4>
-              <p class="tech-line">Python · Llama 3 70B · GPT-OSS 120B · Gemini Gemma 3 27B · Structured prompting · Cohen's κ · Inverse probability weighting</p>
+              <p class="tech-line">Python · Llama 3 70B · GPT-OSS 120B · Gemma 3 27B · Structured prompting · Cohen's κ · Inverse probability weighting</p>
             </div>
           </details>
         </article>
